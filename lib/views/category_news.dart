@@ -3,11 +3,12 @@ import 'package:flutter/material.dart';
 import '../helper/news.dart';
 import '../models/article_model.dart';
 import 'article_view.dart';
+import 'package:readmore/readmore.dart';
 
 class CategoryView extends StatefulWidget {
   final String category;
 
-  const CategoryView({Key? key, required this.category}) : super(key: key);
+  CategoryView({Key? key, required this.category}) : super(key: key);
 
   @override
   State<CategoryView> createState() => _CategoryViewState();
@@ -37,20 +38,14 @@ class _CategoryViewState extends State<CategoryView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        iconTheme: const IconThemeData(
-          color: Colors.black
-        ),
+        iconTheme: const IconThemeData(color: Colors.black),
         title: Row(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: const [
+          children: [
             Text(
-              "News",
+              widget.category.isNotEmpty ? widget.category : "categories",
               style: TextStyle(color: Colors.black),
             ),
-            Text(
-              "App",
-              style: TextStyle(color: Colors.blue),
-            )
           ],
         ),
         actions: [
@@ -67,8 +62,7 @@ class _CategoryViewState extends State<CategoryView> {
       ),
       body: _loading
           ? const Center(
-              child:
-              CircularProgressIndicator(),
+              child: CircularProgressIndicator(),
             )
           : SingleChildScrollView(
               child: Container(
@@ -84,10 +78,7 @@ class _CategoryViewState extends State<CategoryView> {
                           physics: const ClampingScrollPhysics(),
                           itemBuilder: (context, index) {
                             return BlogTile(
-                              imageUrl: articles[index].urlToImage,
-                              title: articles[index].title,
-                              description: articles[index].description,
-                              url: articles[index].url,
+                              A: articles[index],
                             );
                           }),
                     )
@@ -100,53 +91,49 @@ class _CategoryViewState extends State<CategoryView> {
 }
 
 class BlogTile extends StatelessWidget {
-  final String imageUrl, title, description, url;
-
-  const BlogTile(
-      {Key? key,
-      required this.imageUrl,
-      required this.title,
-      required this.description,
-      required this.url})
-      : super(key: key);
+  ArticleModel A;
+  BlogTile({Key? key, required this.A}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => ArticleView(
-                      blogUrl: url,
-                    )));
-      },
-      child: Container(
-        margin: const EdgeInsets.only(bottom: 16),
-        child: Column(
-          children: [
-            ClipRRect(
+    return Container(
+      margin: const EdgeInsets.only(bottom: 16),
+      child: Column(
+        children: [
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => ArticleView(articles: A)));
+            },
+            child: ClipRRect(
                 borderRadius: BorderRadius.circular(6),
-                child: Image.network(imageUrl)),
-            const SizedBox(
-              height: 8,
-            ),
-            Text(
-              title,
-              style: const TextStyle(
-                  fontSize: 18.5,
-                  color: Colors.black87,
-                  fontWeight: FontWeight.w500),
-            ),
-            const SizedBox(
-              height: 6,
-            ),
-            Text(
-              description,
-              style: const TextStyle(color: Colors.black54),
-            )
-          ],
-        ),
+                child: Image.network(A.urlToImage)),
+          ),
+          const SizedBox(
+            height: 8,
+          ),
+          Text(
+            A.title,
+            style: const TextStyle(
+                fontSize: 18.5,
+                color: Colors.black87,
+                fontWeight: FontWeight.w500),
+          ),
+          const SizedBox(
+            height: 6,
+          ),
+          const ReadMoreText(
+            'Flutter is Google’s mobile UI open source framework to build high-quality native (super fast) interfaces for iOS and Android apps with the unified codebase. ',
+            trimLines: 2,
+            colorClickableText: Colors.blue,
+            trimMode: TrimMode.Line,
+            trimCollapsedText: 'ReadMore',
+            trimExpandedText: 'Show less',
+            moreStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+          )
+        ],
       ),
     );
   }

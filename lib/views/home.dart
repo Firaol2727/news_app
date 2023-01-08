@@ -5,13 +5,12 @@ import 'package:news_app/helper/data.dart';
 import 'package:news_app/helper/news.dart';
 import 'package:news_app/models/category_model.dart';
 import 'package:news_app/views/article_view.dart';
-
+import 'package:readmore/readmore.dart';
 import '../models/article_model.dart';
 import 'category_news.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
-
   @override
   State<Home> createState() => _HomeState();
 }
@@ -47,11 +46,11 @@ class _HomeState extends State<Home> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: const [
             Text(
-              "News",
+              "Maleda",
               style: TextStyle(color: Colors.black),
             ),
             Text(
-              "App",
+              " App",
               style: TextStyle(color: Colors.blue),
             )
           ],
@@ -87,7 +86,6 @@ class _HomeState extends State<Home> {
                     ),
 
                     /// Blogs
-
                     Container(
                       padding: const EdgeInsets.only(top: 16),
                       child: ListView.builder(
@@ -96,10 +94,7 @@ class _HomeState extends State<Home> {
                           physics: const ClampingScrollPhysics(),
                           itemBuilder: (context, index) {
                             return BlogTile(
-                              imageUrl: articles[index].urlToImage,
-                              title: articles[index].title,
-                              description: articles[index].description,
-                              url: articles[index].url,
+                              A: articles[index],
                             );
                           }),
                     )
@@ -126,9 +121,8 @@ class CategoryTile extends StatelessWidget {
             context,
             MaterialPageRoute(
                 builder: (context) => CategoryView(
-                  category: categoryName.toLowerCase(),
-                    )
-            ));
+                      category: categoryName.toLowerCase(),
+                    )));
       },
       child: Container(
         margin: const EdgeInsets.only(right: 16),
@@ -167,26 +161,15 @@ class CategoryTile extends StatelessWidget {
 }
 
 class BlogTile extends StatelessWidget {
-  final String imageUrl, title, description, url;
-
-  const BlogTile(
-      {Key? key,
-      required this.imageUrl,
-      required this.title,
-      required this.description,
-      required this.url})
-      : super(key: key);
+  ArticleModel A;
+  BlogTile({Key? key, required this.A}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => ArticleView(
-                      blogUrl: url,
-                    )));
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => ArticleView(articles: A)));
       },
       child: Container(
         margin: const EdgeInsets.only(bottom: 16),
@@ -194,12 +177,12 @@ class BlogTile extends StatelessWidget {
           children: [
             ClipRRect(
                 borderRadius: BorderRadius.circular(6),
-                child: Image.network(imageUrl)),
+                child: Image.network(A.urlToImage)),
             const SizedBox(
               height: 8,
             ),
             Text(
-              title,
+              A.title,
               style: const TextStyle(
                   fontSize: 18.5,
                   color: Colors.black87,
@@ -209,7 +192,7 @@ class BlogTile extends StatelessWidget {
               height: 6,
             ),
             Text(
-              description,
+              A.description,
               style: const TextStyle(color: Colors.black54),
             )
           ],
