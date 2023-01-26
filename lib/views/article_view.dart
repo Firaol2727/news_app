@@ -3,23 +3,18 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-import '../helper/news.dart';
-import '../models/article_model.dart';
-
 class ArticleView extends StatefulWidget {
-  ArticleModel articles;
-  ArticleView({Key? key, required this.articles}) : super(key: key);
+  final String blogUrl;
+
+  const ArticleView({Key? key, required this.blogUrl}) : super(key: key);
 
   @override
   State<ArticleView> createState() => _ArticleViewState();
 }
 
 class _ArticleViewState extends State<ArticleView> {
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
+  final Completer<WebViewController> _completer =
+      Completer<WebViewController>();
 
   @override
   Widget build(BuildContext context) {
@@ -56,29 +51,11 @@ class _ArticleViewState extends State<ArticleView> {
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
-        child: Column(
-          children: [
-            ClipRRect(
-                borderRadius: BorderRadius.circular(6),
-                child: Image.network(widget.articles.urlToImage)),
-            const SizedBox(
-              height: 8,
-            ),
-            Text(
-              widget.articles.title,
-              style: const TextStyle(
-                  fontSize: 18.5,
-                  color: Colors.black87,
-                  fontWeight: FontWeight.w500),
-            ),
-            const SizedBox(
-              height: 6,
-            ),
-            Text(
-              widget.articles.description,
-              style: const TextStyle(color: Colors.black54),
-            )
-          ],
+        child: WebView(
+          initialUrl: widget.blogUrl,
+          onWebViewCreated: ((WebViewController webViewController) {
+            _completer.complete(webViewController);
+          }),
         ),
       ),
     );

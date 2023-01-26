@@ -105,7 +105,9 @@ class BlogTile extends StatelessWidget {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => ArticleView(articles: A)));
+                      builder: (context) => ArticleView(
+                            blogUrl: A.url,
+                          )));
             },
             child: ClipRRect(
                 borderRadius: BorderRadius.circular(6),

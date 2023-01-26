@@ -5,7 +5,7 @@ class ArticleModel {
   String url;
   String urlToImage;
   String content;
-  
+   
   ArticleModel(
       {required this.author,
       required this.title,

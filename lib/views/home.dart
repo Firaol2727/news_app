@@ -47,15 +47,15 @@ class _HomeState extends State<Home> {
           children: const [
             Text(
               "Maleda",
-              style: TextStyle(color: Colors.black),
+              style: TextStyle(color: Colors.white),
             ),
             Text(
-              " App",
-              style: TextStyle(color: Colors.blue),
+              " Addis",
+              style: TextStyle(color: Colors.white),
             )
           ],
         ),
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.red,
         elevation: 0.0,
         centerTitle: true,
       ),
@@ -71,6 +71,9 @@ class _HomeState extends State<Home> {
                 child: Column(
                   children: [
                     /// Categories
+                    SizedBox(
+                      height: 10,
+                    ),
                     Container(
                       height: 70,
                       child: ListView.builder(
@@ -168,8 +171,12 @@ class BlogTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => ArticleView(articles: A)));
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => ArticleView(
+                      blogUrl: A.url,
+                    )));
       },
       child: Container(
         margin: const EdgeInsets.only(bottom: 16),
